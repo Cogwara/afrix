@@ -9,6 +9,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./"),
+      "@prisma/client/runtime/library": path.resolve(__dirname, "./lib/prisma-client.ts"),
+      "@prisma/client": path.resolve(__dirname, "./lib/prisma-client.ts"),
     },
   },
 });

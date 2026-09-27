@@ -21,7 +21,7 @@ AFRIX is a full-stack digital work marketplace connecting African workers with g
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + shadcn/ui design primitives
 - **Database**: Supabase PostgreSQL
-- **ORM**: Prisma ORM (v6.19.3) with connection pooling
+- **ORM**: [Prisma ORM 8](https://www.prisma.io/docs/v8) (`@prisma/orm-postgres` & Prisma contract architecture) with connection pooling
 - **Authentication**: Supabase Auth (`@supabase/ssr`)
 - **Storage**: Supabase Storage (`avatars`, `task-evidence`, `business-assets`)
 - **Validation**: Zod
@@ -57,10 +57,12 @@ afrix/
 ├── docs/                   # Full documentation suite
 ├── lib/
 │   ├── auth/               # Authenticated session resolution & RBAC
+│   ├── db.ts               # Native Prisma 8 postgres contract database client
 │   ├── fraud/              # Fraud detection, velocity checks, and anomaly scoring
 │   ├── ledger/             # Immutable financial ledger service & atomic transactions
 │   ├── payments/           # Payment & Payout provider adapter pattern (Mock & Production)
-│   ├── prisma.ts           # Prisma client singleton
+│   ├── prisma.ts           # Prisma client export singleton
+│   ├── prisma-client.ts    # Prisma 8 backward-compatible ORM delegate client
 │   ├── referrals/          # Productivity-linked referral qualification engine
 │   ├── reputation/         # XP, level progression, and weighted reputation scoring
 │   ├── storage/            # Supabase Storage service with MIME & size validation
@@ -68,12 +70,15 @@ afrix/
 │   ├── utils.ts            # Formatting, styling, and referral code utilities
 │   └── validations/        # Zod validation schemas
 ├── prisma/
+│   ├── contract.d.ts       # Prisma 8 emitted type contract
+│   ├── contract.json       # Prisma 8 emitted schema contract
 │   ├── schema.prisma       # Complete PostgreSQL database schema
 │   └── seed.ts             # Pan-African seed data (categories, demo tasks, users, missions)
 ├── tests/                  # Financial, fraud, and reputation unit test suites
 ├── middleware.ts           # Edge session refresh and route authorization
 ├── next.config.ts          # Next.js configuration
 ├── package.json            # Dependencies and scripts
+├── prisma.config.ts        # Prisma 8 configuration with @prisma/orm-postgres/config
 ├── tailwind.config.ts      # Brand palette configuration
 ├── vercel.json             # Vercel deployment and cron jobs specification
 └── vitest.config.ts        # Test runner configuration
@@ -96,11 +101,11 @@ cp .env.example .env
 ```
 For local testing, placeholder values in `.env` allow testing all core workflows using mock payment and session providers.
 
-### 3. Generate Prisma Client & Run Seed
+### 3. Generate Prisma 8 Contract & Run Seed
 ```bash
-npm run prisma:generate
+npm run prisma:emit    # Emits Prisma 8 contract (contract.json & contract.d.ts)
 # To push schema to your local or Supabase PostgreSQL:
-# npx prisma db push
+# npm run prisma:db-push
 # npm run seed
 ```
 
