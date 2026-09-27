@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "prisma generate && next build",
+  "crons": [
+    {
+      "path": "/api/cron/daily-missions",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/update-leaderboards",
+      "schedule": "*/30 * * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-expired-tasks",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
